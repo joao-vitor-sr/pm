@@ -16,10 +16,12 @@ usage() {
 add_project() {
   name=$1
   printf '%s\n' "The project was '$name' added."
+
+  # validating if the project alreayd exist (if exist will update instead add a new)
 }
 
 list_projects() {
-  printf "The projects are"
+  find . -type f -name \*.project | sed 's/..//;s/\.project$//'
 }
 
 remove_project() {
@@ -38,7 +40,9 @@ stop_project() {
 }
 
 main() {
-  : "${PASH_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
+  : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
+
+  cd "$PM_DIR"
 
   case $1 in
     add*) add_project "$2" ;;
