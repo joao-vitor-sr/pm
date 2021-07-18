@@ -8,6 +8,41 @@ sread() {
   printf '\n'
 }
 
+
+yn() {
+  printf '%s [y/n]: ' "$1"
+
+    # Enable raw input to allow for a single byte to be read from
+    # stdin without needing to wait for the user to press Return.
+    stty -icanon
+
+    # Read a single byte from stdin using 'dd'. POSIX 'read' has
+    # no support for single/'N' byte based input from the user.
+    answer=$(dd ibs=1 count=1 2>/dev/null)
+
+    # Disable raw input, leaving the terminal how we *should*
+    # have found it.
+    stty icanon
+
+    printf '\n'
+
+    # Handle the answer here directly, enabling this function's
+    # return status to be used in place of checking for '[yY]'
+    # throughout this program.
+    glob "$answer" '[yY]'
+  }
+
+glob() {
+  # This is a simple wrapper around a case statement to allow
+  # for simple string comparisons against globs.
+  #
+  # Example: if glob "Hello World" '* World'; then
+  #
+  # Disable this warning as it is the intended behavior.
+  # shellcheck disable=2254
+  case $1 in $2) return 0; esac; return 1
+  }
+
 usage() {
   printf %s "\
     PM 1.0.0 - Project Manager.
@@ -29,18 +64,23 @@ add_project() {
   if test -f "$nameOfFile"; then
     echo "the $name already exist."
   else
-    touch "$nameOfFile"
 
     stillAsking=true
+    :>"$nameOfFile"
+
     while [ "$stillAsking" = true ]
     do
       sread commandToStart "Enter the command to start the project"
 
-      printf '%s' "The command is $commandToStart"
+      echo "$commandToStart" >> "$nameOfFile"
 
-      stillAsking=false
+      if yn "You want add more one command?"; then
+        continue
+      else
+        stillAsking=false
+        break
+      fi
     done
-
   fi
 }
 
