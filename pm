@@ -112,7 +112,7 @@ remove_project() {
 
 start_project() {
   name=$1
-  nameOfFile="$1.project"
+  nameOfFile="$1.project.start"
 
   if test -f "$nameOfFile"; then
     while IFS= read -r line || [ -n "$line" ]; do
