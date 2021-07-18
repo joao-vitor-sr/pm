@@ -59,6 +59,8 @@ usage() {
 add_project() {
   name=$1
   nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
 
   # validating if the project already exist (if exist will update instead add a new)
   if test -f "$nameOfFile"; then
@@ -67,6 +69,8 @@ add_project() {
 
     stillAsking=true
     :>"$nameOfFile"
+    :>"$nameOfFileStart"
+    :>"$nameOfFileStop"
 
     while [ "$stillAsking" = true ]
     do
@@ -91,9 +95,13 @@ list_projects() {
 remove_project() {
   name=$1
   nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
 
   if test -f "$nameOfFile"; then
     rm -rf "$nameOfFile"
+    rm -rf "$nameOfFileStart"
+    rm -rf "$nameOfFileStop"
   else
     printf '%s\n' "The project '$name' Don't exist"
   fi
@@ -105,7 +113,7 @@ start_project() {
 
   if test -f "$nameOfFile"; then
     while IFS= read -r line || [ -n "$line" ]; do
-      printf '%s\n' "$line"
+      $line
     done < "$nameOfFile"
   else
     printf '%s' "This project don't exist"
