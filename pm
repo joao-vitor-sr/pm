@@ -76,9 +76,12 @@ add_project() {
     do
       sread commandToStart "Enter the command to start the project"
 
-      echo "$commandToStart" >> "$nameOfFile"
+      echo "$commandToStart" >> "$nameOfFileStart"
 
-      if yn "You want add more one command?"; then
+      sread commandToStop "Now enter the command to stop the project"
+      echo "$commandToStop" >> "$nameOfFileStop"
+
+      if yn "You want add more commands?"; then
         continue
       else
         stillAsking=false
