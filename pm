@@ -148,7 +148,28 @@ stop_project() {
 
 describe_project() {
   name=$1
-  printf '%s' "This project don't exist"
+  nameOfFile="$1.project"
+  nameOfFileStop="$1.project.stop"
+  nameOfFileStart="$1.project.start"
+
+  if test -f "$nameOfFile"; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf 'Description:\n %s' "$line"
+    done < "$nameOfFile"
+
+    printf '\n\n%s' "Commands to start the project:"
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf '\n %s' "$line"
+    done < "$nameOfFileStart"
+
+    printf '\n\n%s' "Commands to stop the project:"
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf '\n %s' "$line"
+    done < "$nameOfFileStop"
+
+  else
+    printf '%s' "This project don't exist"
+  fi
 }
 
 main() {
