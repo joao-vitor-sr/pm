@@ -125,7 +125,15 @@ start_project() {
 
 stop_project() {
   name=$1
-  printf '%s\n' "stoping the project '$name'"
+  nameOfFile="$1.project.stop"
+
+  if test -f "$nameOfFile"; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      $line
+    done < "$nameOfFile"
+  else
+    printf '%s' "This project don't exist"
+  fi
 }
 
 main() {
