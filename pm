@@ -51,7 +51,8 @@ usage() {
   =>  del [name]   - Delete a project
   =>  start [name] - Start a project.
   =>  stop [name]  - Stop a project.
-  =>  list        - List all projects.
+  =>  list         - List all projects.
+  =>  desc [name]  - List all projects.
   "
   exit 0
 }
@@ -62,6 +63,12 @@ add_project() {
   nameOfFileStart="$1.project.start"
   nameOfFileStop="$1.project.stop"
 
+  if test -z "$name"
+  then
+    printf '%s' "The name of the prject can't be null"
+    exit 0
+  fi
+
   # validating if the project already exist (if exist will update instead add a new)
   if test -f "$nameOfFile"; then
     echo "the $name already exist."
@@ -71,6 +78,9 @@ add_project() {
     :>"$nameOfFile"
     :>"$nameOfFileStart"
     :>"$nameOfFileStop"
+
+    sread descriptionOfProject "Type a description for the project"
+    echo "$descriptionOfProject" >> "$nameOfFile"
 
     while [ "$stillAsking" = true ]
     do
@@ -136,6 +146,11 @@ stop_project() {
   fi
 }
 
+describe_project() {
+  name=$1
+  printf '%s' "This project don't exist"
+}
+
 main() {
   : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
 
@@ -147,6 +162,7 @@ main() {
     start*) start_project "$2" ;;
     stop*) stop_project "$2" ;;
     list*) list_projects "$2" ;;
+    desc*) describe_project "$2" ;;
     *) usage
   esac
 }
