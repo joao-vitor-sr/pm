@@ -188,7 +188,7 @@ edit_project() {
 
   if test -z "$name"
   then
-    printf '%s' "The name of the prject can't be null"
+    printf '%s' "The name of the project can't be null"
     exit 0
   fi
 
@@ -197,6 +197,17 @@ edit_project() {
 
     case $optionToEdit in
       stop)
+        if yn "You want add more one command?"; then
+          sread newValue "Now type the new value"
+          echo $newValue >> $nameOfFileStop
+          exit 0
+        elif yn "You want add remove one command?"; then
+          sread numberOfLine "Enter the number of line than you want remove"
+          sed -i "$numberOfLine d" $nameOfFileStop
+          exit 0
+        fi
+        fi
+
         sread numberOfLine "Enter the number of line than you want edit"
 
         sread newValue "Now type the new value"
@@ -205,14 +216,29 @@ edit_project() {
         break
         ;;
       start)
-        sread numberOfLine "Enter the number of line than you want edit"
+        if yn "You want add more one command?"; then
+          sread newValue "Now type the new value"
+          echo $newValue >> $nameOfFileStart
+          exit 0
+        elif yn "You want add remove one command?"; then
+          sread numberOfLine "Enter the number of line than you want remove"
+          sed -i "$numberOfLine d" $nameOfFileStart
+          exit 0
+        fi
 
+        sread numberOfLine "Enter the number of line than you want edit"
         sread newValue "Now type the new value"
 
         sed -i "$numberOfLine s/.*/$newValue/" $nameOfFileStart
         break
         ;;
       desc)
+        if yn "You want add more one line at description?"; then
+          sread newValue "Now type the new line"
+          echo $newValue >> $nameOfFile
+          exit 0
+        fi
+
         sread newDescription "Enter the new description"
         echo "$newDescription" > "$nameOfFile"
         break;
@@ -224,26 +250,26 @@ edit_project() {
 
   else
     printf '%s' "This project don't exist"
-  fi
+        fi
 
 
-}
+      }
 
-main() {
-  : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
+    main() {
+      : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
 
-  cd "$PM_DIR"
+      cd "$PM_DIR"
 
-  case $1 in
-    add*) add_project "$2" ;;
-    del*) remove_project "$2" ;;
-    start*) start_project "$2" ;;
-    stop*) stop_project "$2" ;;
-    list*) list_projects "$2" ;;
-    desc*) describe_project "$2" ;;
-    edit*) edit_project "$2" ;;
-    *) usage
-  esac
-}
+      case $1 in
+        add*) add_project "$2" ;;
+        del*) remove_project "$2" ;;
+        start*) start_project "$2" ;;
+        stop*) stop_project "$2" ;;
+        list*) list_projects "$2" ;;
+        desc*) describe_project "$2" ;;
+        edit*) edit_project "$2" ;;
+        *) usage
+      esac
+    }
 
-[ "$1" ] || usage && main "$@"
+  [ "$1" ] || usage && main "$@"
