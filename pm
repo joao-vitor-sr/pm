@@ -179,6 +179,8 @@ describe_project() {
 edit_project() {
   name=$1
   nameOfFile="$1.project"
+  nameOfFileStop="$1.project.stop"
+  nameOfFileStart="$1.project.start"
 
   describe_project $1
 
@@ -199,11 +201,15 @@ edit_project() {
 
         sread newValue "Now type the new value"
 
-        sed -i 'top' $nameOfFile
+        sed -i "$numberOfLine s/.*/$newValue/" $nameOfFileStop
+        break
         ;;
-
       start)
-        echo "Start"
+        sread numberOfLine "Enter the number of line than you want edit"
+
+        sread newValue "Now type the new value"
+
+        sed -i "$numberOfLine s/.*/$newValue/" $nameOfFileStart
         break
         ;;
       desc)
