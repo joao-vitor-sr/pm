@@ -13,7 +13,7 @@ PM 1.0.0 - Project Manager.
 =>  start [name] - Start a project.
 =>  stop [name]  - Stop a project.
 =>  list         - List all projects.
-=>  desc [name]  - List all projects.
+=>  desc [name]  - Describe a project.
 =>  edit [name]  - Edit a project.
 ```
 

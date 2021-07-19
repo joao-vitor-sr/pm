@@ -52,7 +52,7 @@ usage() {
   =>  start [name] - Start a project.
   =>  stop [name]  - Stop a project.
   =>  list         - List all projects.
-  =>  desc [name]  - List all projects.
+  =>  desc [name]  - Describe a project.
   =>  edit [name]  - Edit a project.
   "
   exit 0
