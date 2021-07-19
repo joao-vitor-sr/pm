@@ -51,7 +51,8 @@ usage() {
   =>  del [name]   - Delete a project
   =>  start [name] - Start a project.
   =>  stop [name]  - Stop a project.
-  =>  list        - List all projects.
+  =>  list         - List all projects.
+  =>  desc [name]  - List all projects.
   "
   exit 0
 }
@@ -59,6 +60,14 @@ usage() {
 add_project() {
   name=$1
   nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
+
+  if test -z "$name"
+  then
+    printf '%s' "The name of the prject can't be null"
+    exit 0
+  fi
 
   # validating if the project already exist (if exist will update instead add a new)
   if test -f "$nameOfFile"; then
@@ -67,14 +76,21 @@ add_project() {
 
     stillAsking=true
     :>"$nameOfFile"
+    :>"$nameOfFileStart"
+    :>"$nameOfFileStop"
+
+    sread descriptionOfProject "Type a description for the project"
+    echo "$descriptionOfProject" >> "$nameOfFile"
 
     while [ "$stillAsking" = true ]
     do
       sread commandToStart "Enter the command to start the project"
+      echo "$commandToStart" >> "$nameOfFileStart"
 
-      echo "$commandToStart" >> "$nameOfFile"
+      sread commandToStop "Now enter the command to stop the project"
+      echo "$commandToStop" >> "$nameOfFileStop"
 
-      if yn "You want add more one command?"; then
+      if yn "You want add more commands?"; then
         continue
       else
         stillAsking=false
@@ -91,9 +107,13 @@ list_projects() {
 remove_project() {
   name=$1
   nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
 
   if test -f "$nameOfFile"; then
     rm -rf "$nameOfFile"
+    rm -rf "$nameOfFileStart"
+    rm -rf "$nameOfFileStop"
   else
     printf '%s\n' "The project '$name' Don't exist"
   fi
@@ -101,12 +121,54 @@ remove_project() {
 
 start_project() {
   name=$1
-  printf '%s\n' "Starting the project '$name'"
+  nameOfFile="$1.project.start"
+
+  if test -f "$nameOfFile"; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      $line
+    done < "$nameOfFile"
+  else
+    printf '%s' "This project don't exist"
+  fi
 }
 
 stop_project() {
   name=$1
-  printf '%s\n' "stoping the project '$name'"
+  nameOfFile="$1.project.stop"
+
+  if test -f "$nameOfFile"; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      $line
+    done < "$nameOfFile"
+  else
+    printf '%s' "This project don't exist"
+  fi
+}
+
+describe_project() {
+  name=$1
+  nameOfFile="$1.project"
+  nameOfFileStop="$1.project.stop"
+  nameOfFileStart="$1.project.start"
+
+  if test -f "$nameOfFile"; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf 'Description:\n %s' "$line"
+    done < "$nameOfFile"
+
+    printf '\n\n%s' "Commands to start the project:"
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf '\n %s' "$line"
+    done < "$nameOfFileStart"
+
+    printf '\n\n%s' "Commands to stop the project:"
+    while IFS= read -r line || [ -n "$line" ]; do
+      printf '\n %s' "$line"
+    done < "$nameOfFileStop"
+
+  else
+    printf '%s' "This project don't exist"
+  fi
 }
 
 main() {
@@ -120,6 +182,7 @@ main() {
     start*) start_project "$2" ;;
     stop*) stop_project "$2" ;;
     list*) list_projects "$2" ;;
+    desc*) describe_project "$2" ;;
     *) usage
   esac
 }
