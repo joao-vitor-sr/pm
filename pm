@@ -53,6 +53,7 @@ usage() {
   =>  stop [name]  - Stop a project.
   =>  list         - List all projects.
   =>  desc [name]  - List all projects.
+  =>  edit [name]  - Edit a project.
   "
   exit 0
 }
@@ -71,7 +72,7 @@ add_project() {
 
   # validating if the project already exist (if exist will update instead add a new)
   if test -f "$nameOfFile"; then
-    echo "the $name already exist."
+    printf '%s' "the '$name' already exist."
   else
 
     stillAsking=true
@@ -155,20 +156,71 @@ describe_project() {
     while IFS= read -r line || [ -n "$line" ]; do
       printf 'Description:\n %s' "$line"
     done < "$nameOfFile"
-
     printf '\n\n%s' "Commands to start the project:"
+
+    numberOfLine=1;
     while IFS= read -r line || [ -n "$line" ]; do
-      printf '\n %s' "$line"
+      printf '\n %s' "[$numberOfLine] $line"
+      numberOfLine=$((numberOfLine+1))
     done < "$nameOfFileStart"
 
     printf '\n\n%s' "Commands to stop the project:"
+    numberOfLine=1;
     while IFS= read -r line || [ -n "$line" ]; do
-      printf '\n %s' "$line"
+      printf '\n %s' "[$numberOfLine] $line"
+      numberOfLine=$((numberOfLine+1))
     done < "$nameOfFileStop"
 
   else
     printf '%s' "This project don't exist"
   fi
+}
+
+edit_project() {
+  name=$1
+  nameOfFile="$1.project"
+
+  describe_project $1
+
+  printf '\n\n'
+
+  if test -z "$name"
+  then
+    printf '%s' "The name of the prject can't be null"
+    exit 0
+  fi
+
+  if test -f "$nameOfFile"; then
+    sread optionToEdit "Write your option [start/stop/desc]"
+
+    case $optionToEdit in
+      stop)
+        sread numberOfLine "Enter the number of line than you want edit"
+
+        sread newValue "Now type the new value"
+
+        sed -i 'top' $nameOfFile
+        ;;
+
+      start)
+        echo "Start"
+        break
+        ;;
+      desc)
+        sread newDescription "Enter the new description"
+        echo "$newDescription" > "$nameOfFile"
+        break;
+        ;;
+      *)
+        printf '%s' "This option don't exist"
+        exit 0
+    esac
+
+  else
+    printf '%s' "This project don't exist"
+  fi
+
+
 }
 
 main() {
@@ -183,6 +235,7 @@ main() {
     stop*) stop_project "$2" ;;
     list*) list_projects "$2" ;;
     desc*) describe_project "$2" ;;
+    edit*) edit_project "$2" ;;
     *) usage
   esac
 }
