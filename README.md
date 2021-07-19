@@ -1,5 +1,5 @@
 # PM
-A simple Projects Manager written in POSIX ´´´sh´´´
+A simple Projects Manager written in POSIX ```sh```
 
 ## Usage
 
@@ -18,12 +18,12 @@ PM 1.0.0 - Project Manager.
 ```
 
 ### Examples
-For create a project you can use the next command
+To create a project you can use the next command
 ```
 pm add <name_of_project>
 ```
 
-Later use the command above will start the quiz under
+so will start a short quiz with what commands than you want to add
 ```
 Type a description for the project: monkey
 
@@ -33,4 +33,4 @@ Now enter the command to stop the project: docker ps
 
 You want add more commands? [y/n]: n
 ```
-You can add multiples commands to start and to stop a project
+you can add multiples commands to start and to stop the project
