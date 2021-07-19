@@ -64,8 +64,7 @@ add_project() {
   nameOfFileStart="$1.project.start"
   nameOfFileStop="$1.project.stop"
 
-  if test -z "$name"
-  then
+  if test -z "$name"; then
     printf '%s' "The name of the prject can't be null"
     exit 0
   fi
@@ -206,7 +205,6 @@ edit_project() {
           sed -i "$numberOfLine d" $nameOfFileStop
           exit 0
         fi
-        fi
 
         sread numberOfLine "Enter the number of line than you want edit"
 
@@ -250,26 +248,26 @@ edit_project() {
 
   else
     printf '%s' "This project don't exist"
-        fi
+  fi
 
 
-      }
+}
 
-    main() {
-      : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
+main() {
+  : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
 
-      cd "$PM_DIR"
+  cd "$PM_DIR"
 
-      case $1 in
-        add*) add_project "$2" ;;
-        del*) remove_project "$2" ;;
-        start*) start_project "$2" ;;
-        stop*) stop_project "$2" ;;
-        list*) list_projects "$2" ;;
-        desc*) describe_project "$2" ;;
-        edit*) edit_project "$2" ;;
-        *) usage
-      esac
-    }
+  case $1 in
+    add*) add_project "$2" ;;
+    del*) remove_project "$2" ;;
+    start*) start_project "$2" ;;
+    stop*) stop_project "$2" ;;
+    list*) list_projects "$2" ;;
+    desc*) describe_project "$2" ;;
+    edit*) edit_project "$2" ;;
+    *) usage
+  esac
+}
 
-  [ "$1" ] || usage && main "$@"
+[ "$1" ] || usage && main "$@"
