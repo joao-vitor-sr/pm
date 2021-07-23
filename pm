@@ -246,7 +246,7 @@ stop_project() {
   fi
 }
 
-# === DESCRIBE PROJECT === 
+# === DESCRIBE PROJECT ===
 describe_project() {
   name=$1
   nameOfFile="$1.project"
@@ -279,8 +279,9 @@ describe_project() {
   fi
 }
 
-# === MAIN === 
+# === MAIN ===
 main() {
+  mkdir -p  "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
   : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
 
   cd "$PM_DIR" || exit || return;
