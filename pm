@@ -82,51 +82,6 @@ create_project() {
   printf '%s' "Congratulations the '$name' project was created"
 }
 
-add_project() {
-  name=$1
-  nameOfFile="$1.project"
-  nameOfFileStart="$1.project.start"
-  nameOfFileStop="$1.project.stop"
-
-  if test -z "$name"; then
-    printf '%s' "The name of the project can't be null"
-    exit 0
-  fi
-
-  # validating if the project already exist (if exist will update instead add a new)
-  if test -f "$nameOfFile"; then
-    printf '%s' "the '$name' already exist."
-  else
-
-    stillAsking=true
-    :>"$nameOfFile"
-    :>"$nameOfFileStart"
-    :>"$nameOfFileStop"
-
-    descriptionOfProject=""
-    sread descriptionOfProject "Type a description for the project"
-    echo "$descriptionOfProject" >> "$nameOfFile"
-
-    while [ "$stillAsking" = true ]
-    do
-      commandToStart=""
-      sread commandToStart "Enter the command to start the project"
-      echo "$commandToStart" >> "$nameOfFileStart"
-
-      commandToStop=""
-      sread commandToStop "Now enter the command to stop the project"
-      echo "$commandToStop" >> "$nameOfFileStop"
-
-      if yn "You want add more commands?"; then
-        continue
-      else
-        stillAsking=false
-        break
-      fi
-    done
-  fi
-}
-
 add_command() {
   name=$1
   nameOfFile="$1.project"
@@ -171,7 +126,7 @@ list_projects() {
   find . -type f -name \*.project | sed 's/..//;s/\.project$//'
 }
 
-remove_project() {
+delete_project () {
   name=$1
   nameOfFile="$1.project"
   nameOfFileStart="$1.project.start"
@@ -332,7 +287,7 @@ main() {
   case $1 in
     add*) add_command "$2" ;;
     create*) create_project "$2" ;;
-    del*) remove_project "$2" ;;
+    del*) delete_project "$2" ;;
     start*) start_project "$2" ;;
     stop*) stop_project "$2" ;;
     list*) list_projects "$2" ;;
