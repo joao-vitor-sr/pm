@@ -1,10 +1,7 @@
 # PM
-A simple command line Project Management written in POSIX
+A simple command-line Project Management wrote in POSIX
 
-PM is a command-line Project Management
-PM can manager multiple projects
-start and stop projects
-
+PM is a command-line Project Management PM can manage multiple projects start and stop projects
 The overall purpose of PM is to be a powerful and simple Project Management
 
 ## Installation
@@ -12,7 +9,7 @@ The overall purpose of PM is to be a powerful and simple Project Management
 - Download the latest release.
   - [https://github.com/joao-vitor-sr/pm](https://github.com/joao-vitor-sr/pm)
 - Run make install inside the script directory to install the script.
-  - MacOS: make PREFIX=/usr/local install
+  - macOS: make PREFIX=/usr/local install
   - Haiku: make PREFIX=/boot/home/config/non-packaged install
   - OpenIndiana: gmake install
   - MinGW/MSys: make -i install
