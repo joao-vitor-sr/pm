@@ -59,6 +59,29 @@ usage() {
   exit 0
 }
 
+create_project() {
+  name=$1
+  nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
+
+  if test -z "$name"; then
+    printf '%s' "The name of the project can't be null"
+    exit 0
+  fi
+
+  # validating if the project already exist (if exist will update instead add a new)
+  if test -f "$nameOfFile"; then
+    printf '%s' "the '$name' project already exist."
+  else
+    :>"$nameOfFile"
+    :>"$nameOfFileStart"
+    :>"$nameOfFileStop"
+
+    printf '%s' "Congratulations the '$name' project was created"
+  fi
+}
+
 add_project() {
   name=$1
   nameOfFile="$1.project"
@@ -66,7 +89,7 @@ add_project() {
   nameOfFileStop="$1.project.stop"
 
   if test -z "$name"; then
-    printf '%s' "The name of the prject can't be null"
+    printf '%s' "The name of the project can't be null"
     exit 0
   fi
 
@@ -268,6 +291,7 @@ main() {
 
   case $1 in
     add*) add_project "$2" ;;
+    create*) create_project "$2" ;;
     del*) remove_project "$2" ;;
     start*) start_project "$2" ;;
     stop*) stop_project "$2" ;;
