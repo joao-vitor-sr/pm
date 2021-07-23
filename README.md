@@ -9,13 +9,14 @@ SYNOPSIS
 PM 1.0.0 - Project Manager.
 
 =>  add [name]    - Add a new command in a project
+=>  remove [name] - Remove a command in a project
 =>  create [name] - Create a a new project
 =>  del [name]    - Delete a project
 =>  start [name]  - Start a project.
 =>  stop [name]   - Stop a project.
 =>  list          - List all projects.
 =>  desc [name]   - Describe a project.
-=>  edit [name]   - Edit a project.
+
 ```
 
 ### Examples
