@@ -22,17 +22,9 @@ PM 1.0.3 - Project Manager.
 ### Examples
 To create a project you can use the next command
 ```
+pm create <name_of_project>
+```
+for add commands use this command
+```
 pm add <name_of_project>
 ```
-
-so will start a short quiz with what commands than you want to add
-```
-Type a description for the project: monkey
-
-Enter the command to start the project: docker ps
-
-Now enter the command to stop the project: docker ps
-
-You want add more commands? [y/n]: n
-```
-you can add multiples commands to start and to stop the project
