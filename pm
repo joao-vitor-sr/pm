@@ -79,14 +79,17 @@ add_project() {
     :>"$nameOfFileStart"
     :>"$nameOfFileStop"
 
+    descriptionOfProject=""
     sread descriptionOfProject "Type a description for the project"
     echo "$descriptionOfProject" >> "$nameOfFile"
 
     while [ "$stillAsking" = true ]
     do
+      commandToStart=""
       sread commandToStart "Enter the command to start the project"
       echo "$commandToStart" >> "$nameOfFileStart"
 
+      commandToStop=""
       sread commandToStop "Now enter the command to stop the project"
       echo "$commandToStop" >> "$nameOfFileStop"
 
@@ -181,7 +184,7 @@ edit_project() {
   nameOfFileStop="$1.project.stop"
   nameOfFileStart="$1.project.start"
 
-  describe_project $1
+  describe_project "$1"
 
   printf '\n\n'
 
@@ -192,17 +195,20 @@ edit_project() {
   fi
 
   if test -f "$nameOfFile"; then
+    optionToEdit=""
     sread optionToEdit "Write your option [start/stop/desc]"
 
     case $optionToEdit in
       stop)
         if yn "You want add more one command?"; then
+          newValue=""
+
           sread newValue "Now type the new value"
-          echo $newValue >> $nameOfFileStop
+          echo "$newValue" >> "$nameOfFileStop"
           exit 0
         elif yn "You want add remove one command?"; then
           sread numberOfLine "Enter the number of line than you want remove"
-          sed -i "$numberOfLine d" $nameOfFileStop
+          sed -i "$numberOfLine d" "$nameOfFileStop"
           exit 0
         fi
 
@@ -210,36 +216,37 @@ edit_project() {
 
         sread newValue "Now type the new value"
 
-        sed -i "$numberOfLine s/.*/$newValue/" $nameOfFileStop
-        break
+        sed -i "$numberOfLine s/.*/$newValue/" "$nameOfFileStop"
+        return 0;
         ;;
       start)
         if yn "You want add more one command?"; then
           sread newValue "Now type the new value"
-          echo $newValue >> $nameOfFileStart
+          echo "$newValue" >> "$nameOfFileStart"
           exit 0
         elif yn "You want add remove one command?"; then
           sread numberOfLine "Enter the number of line than you want remove"
-          sed -i "$numberOfLine d" $nameOfFileStart
+          sed -i "$numberOfLine d" "$nameOfFileStart"
           exit 0
         fi
 
         sread numberOfLine "Enter the number of line than you want edit"
         sread newValue "Now type the new value"
 
-        sed -i "$numberOfLine s/.*/$newValue/" $nameOfFileStart
-        break
+        sed -i "$numberOfLine s/.*/$newValue/" "$nameOfFileStart"
+        return 0;
         ;;
       desc)
         if yn "You want add more one line at description?"; then
           sread newValue "Now type the new line"
-          echo $newValue >> $nameOfFile
+          echo "$newValue" >> "$nameOfFile"
           exit 0
         fi
+        newDescription=""
 
         sread newDescription "Enter the new description"
         echo "$newDescription" > "$nameOfFile"
-        break;
+        return 0;
         ;;
       *)
         printf '%s' "This option don't exist"
@@ -256,7 +263,7 @@ edit_project() {
 main() {
   : "${PM_DIR:=${XDG_DATA_HOME:=$HOME/.local/share}/pm}"
 
-  cd "$PM_DIR"
+  cd "$PM_DIR" || exit || return;
 
   case $1 in
     add*) add_project "$2" ;;
