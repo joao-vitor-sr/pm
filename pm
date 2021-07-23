@@ -45,7 +45,7 @@ glob() {
 
 usage() {
   printf %s "\
-    PM 1.0.0 - Project Manager.
+    PM 1.0.3 - Project Manager.
 
   =>  add [name]    - Add a new command in a project
   =>  remove [name] - Remove a command in a project
