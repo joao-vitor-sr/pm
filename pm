@@ -100,7 +100,9 @@ add_command() {
   fi
 
   optionToAdd=""
-  sread optionToAdd "Enter the option than you want add [stop, start]"
+  sread optionToAdd "Enter the option than you want add [stop, start,
+  description-force, description] use only description for add more lines at
+  description use description-force to overwrite"
 
 
   case $optionToAdd in
@@ -116,6 +118,24 @@ add_command() {
       sread commandToStop "Enter the command to stop"
 
       echo "$commandToStop" >> "$nameOfFileStop"
+      exit 0;
+      ;;
+
+    description)
+      newLineOfDescription=""
+      sread newLineOfDescription "Enter the new line for the description"
+
+      echo "$newLineOfDescription"
+
+      echo "$newLineOfDescription" >> "$nameOfFile"
+      exit 0;
+      ;;
+
+    description-force)
+      newDescription=""
+      sread newDescription "Enter the new description"
+
+      echo "$newDescription" > "$nameOfFile"
       exit 0;
       ;;
     *) printf '%s' "This option does not exist" exit 0
@@ -174,10 +194,12 @@ describe_project() {
   nameOfFileStart="$1.project.start"
 
   if test -f "$nameOfFile"; then
+    printf '%s \n' "Description:"
     while IFS= read -r line || [ -n "$line" ]; do
-      printf 'Description:\n %s' "$line"
+      printf '%s\n' "$line"
     done < "$nameOfFile"
-    printf '\n\n%s' "Commands to start the project:"
+
+    printf '\n%s' "Commands to start the project:"
 
     numberOfLine=1;
     while IFS= read -r line || [ -n "$line" ]; do
