@@ -70,16 +70,16 @@ create_project() {
     exit 0
   fi
 
-  # validating if the project already exist (if exist will update instead add a new)
   if test -f "$nameOfFile"; then
     printf '%s' "the '$name' project already exist."
-  else
-    :>"$nameOfFile"
-    :>"$nameOfFileStart"
-    :>"$nameOfFileStop"
-
-    printf '%s' "Congratulations the '$name' project was created"
+    exit 0
   fi
+
+  :>"$nameOfFile"
+  :>"$nameOfFileStart"
+  :>"$nameOfFileStop"
+
+  printf '%s' "Congratulations the '$name' project was created"
 }
 
 add_project() {
@@ -125,6 +125,46 @@ add_project() {
       fi
     done
   fi
+}
+
+add_command() {
+  name=$1
+  nameOfFile="$1.project"
+  nameOfFileStart="$1.project.start"
+  nameOfFileStop="$1.project.stop"
+
+
+  if test -z "$name"; then
+    printf '%s' "The name of the project can't be null"
+    exit 0
+  fi
+
+  if ! test -f "$nameOfFile"; then
+    printf '%s' "This project does not exist"
+    exit 0
+  fi
+
+  optionToAdd=""
+  sread optionToAdd "Enter the option than you want add [stop, start]"
+
+
+  case $optionToAdd in
+    start*)
+      commandToStart=""
+      sread commandToStart "Enter the command to start"
+
+      echo "$commandToStart" >> "$nameOfFileStart"
+      exit 0;
+      ;;
+    stop*)
+      commandToStop=""
+      sread commandToStop "Enter the command to stop"
+
+      echo "$commandToStop" >> "$nameOfFileStop"
+      exit 0;
+      ;;
+    *) printf '%s' "This option does not exist" exit 0
+  esac
 }
 
 list_projects() {
@@ -290,7 +330,7 @@ main() {
   cd "$PM_DIR" || exit || return;
 
   case $1 in
-    add*) add_project "$2" ;;
+    add*) add_command "$2" ;;
     create*) create_project "$2" ;;
     del*) remove_project "$2" ;;
     start*) start_project "$2" ;;
