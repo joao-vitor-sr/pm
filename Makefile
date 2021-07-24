@@ -7,7 +7,7 @@ all:
 install:
 	@mkdir -p $(DESTDIR)$(PREFIX)/bin
 	@mkdir -p $(DESTDIR)$(MANDIR)/man1
-	@install -Dm755 pm $(DESTDIR)$(PREFIX)/bin/pm
+	@cp -p pm $(DESTDIR)$(PREFIX)/bin/pm
 	@cp -p pm.1 $(DESTDIR)$(MANDIR)/man1
 	@chmod 755 $(DESTDIR)$(PREFIX)/bin/pm
 
