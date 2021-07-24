@@ -13,4 +13,4 @@ install:
 
 uninstall:
 	@rm -f $(DESTDIR)$(PREFIX)/bin/pm
-	@rm -rf $(DESTDIR)$(MANDIR)/man1/pm.1
+	@rm -rf $(DESTDIR)$(MANDIR)/man1/pm.1*
